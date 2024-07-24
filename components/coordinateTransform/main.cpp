@@ -3,16 +3,23 @@
 
 struct latLonPos
 {
-  double lat{};
-  double lon{};
+  double Lat{};
+  double Lon{};
 };
 
-double calcDiffLat(double fromLat, double toLat)
+struct metricVector
+{
+  double XDelta;
+  double YDelta;
+  double ZDelta;
+};
+
+double CalcDiffLat(double fromLat, double toLat)
 {
   return fromLat - toLat;
 }
 
-double calcDiffLon(double fromLon, double toLon)
+double CalcDiffLon(double fromLon, double toLon)
 {
   return fromLon - toLon;
 }
@@ -20,10 +27,10 @@ double calcDiffLon(double fromLon, double toLon)
 int main()
 {
   latLonPos start{};
-  start.lat = 0.0000;
-  start.lon = 0.0100;
+  start.Lat = 0.0000;
+  start.Lon = 0.0100;
 
   latLonPos end{};
-  end.lat = 0.0100;
-  end.lon = 0.0000;
+  end.Lat = 0.0100;
+  end.Lon = 0.0000;
 }

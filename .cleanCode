@@ -1,0 +1,60 @@
+
+cleanCodeStaged()
+{
+	rm -rf CODE_ANALYSIS
+	output_folder="CODE_ANALYSIS"
+	mkdir -p "${output_folder}"
+	# python Tools/cleanCode/cleanCode-CORE/cleanCodeStaged.py 
+	tidyChanges # cppCheck print to console
+	formatChanges
+}
+cleanCode()
+{
+	hfts
+	rm -rf CODE_ANALYSIS
+	output_folder="CODE_ANALYSIS"
+	mkdir "$output_folder"
+	#python Tools/cleanCode/cleanCode-CORE/cleanCode.py master origin
+	# tidyChanges # cppCheck print to console
+	# formatChanges
+}
+
+tidyChanges()
+{
+	files_to_tidy=$(git diff --name-only --cached --diff-filter=ACMR | grep -E '\.(cpp|hpp)$')
+
+	#if [ -n "$files_to_tidy" ]; then
+            clang-tidy $files_to_tidy --fix-errors
+        #    for file in $files_to_tidy; do
+        #         # Get the file extension (cpp or hpp)
+        #         ext="${ file##*.}"
+
+        #         # Get the base file name without directory
+        #         base_filename=$(basename "$file")
+
+        #         # Define the output file path
+        #         output_file="CODE_ANALYSIS/${ base_filename}.${ ext}"
+
+        #         # Run clang-tidy with fix errors turned on
+        #         clang-tidy "$file" --fix -- -std=c++17 > "$output_file" 2>&1
+
+        #         # Optionally stage the changes made by clang-tidy
+        #         git add "$file"
+        #         done
+}
+
+formatChanges()
+{
+	staged_files_to_format=$(git diff --name-only --cached --diff-filter=ACMR | grep -E '\.(cpp|hpp)$')
+	untracked_files_to_format=$(git diff --name-only --diff-filter=ACMR | grep -E '\.(cpp|hpp)$')
+	clang_format_path="mainlinesandbox/Tools/Compilers/llvm-16.0.0/WIN64/bin/clang-format.exe"
+
+	if [ -n "$staged_files_to_format" ]; then
+		# echo "Formatting code with clang-format..."
+			echo "$staged_files_to_format" | xargs clang-format -i --style=file
+			echo "$untracked_files_to_format" | xargs $clang_format_path -i --style=file
+		echo "Code formatted successfully."
+	else
+		echo "No staged files to format. Skipping clang-format."
+	fi
+}
