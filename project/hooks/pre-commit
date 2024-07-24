@@ -11,8 +11,6 @@
 
 # Run clang-format on staged files
 files_to_format=$(git diff --name-only --cached --diff-filter=ACMR | grep -E '\.(cpp|hpp)$')
-# set clang_format_path="mainlinesandbox/Tools/Compilers/llvm-16.0.0/WIN64/bin/clang-format.exe"
-# clang_format_path="mainlinesandbox/Tools/Compilers/llvm-16.0.0/WIN64/bin/clang-format.exe"
 
 if [ -n "$files_to_format" ]; then
     # Run clang-format only if there are relevant files
