@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#runs clang-tidy script on staged c++ files
+# .git/hooks/analyse-changes.sh
+
+# Run clang-format on staged files
+files_to_format=$(git diff --name-only --cached --diff-filter=ACMR | grep -E '\.(cpp|hpp)$')
+# set clang_format_path="mainlinesandbox/Tools/Compilers/llvm-16.0.0/WIN64/bin/clang-format.exe"
+clang_format_path="mainlinesandbox/Tools/Compilers/llvm-16.0.0/WIN64/bin/clang-format.exe"
+
+if [ -n "$files_to_format" ]; then
+    # Run clang-format only if there are relevant files
+    echo "Formatting code with clang-format..."
+    echo "$files_to_format" | xargs $clang_format_path -i --style=file
+    git add $files_to_format
+    echo "Code formatted successfully."
+else
+    echo "No relevant files to format. Skipping clang-format."
+fi
+
+exit $?
+

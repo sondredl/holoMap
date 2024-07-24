@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Function to run a command and capture the output
+run_command() {
+    command_output=$(eval "$1" 2>&1)
+    return_code=$?
+    echo "$command_output"
+    return $return_code
+}
+
+# Function to check if origin/master can be merged with the current branch
+can_merge_with_master() {
+    # Fetch the latest changes from origin
+    fetch_output=$(run_command "git fetch origin")
+    fetch_code=$?
+    if [ $fetch_code -ne 0 ]; then
+        echo "Failed to fetch from origin: $fetch_output"
+        return 1
+    fi
+
+    # Check if merging origin/master into the current branch would result in conflicts
+    merge_check_output=$(run_command "git merge --no-commit --no-ff origin/master")
+    merge_check_code=$?
+    if [ $merge_check_code -ne 0 ]; then
+        echo "Merge check failed: $merge_check_output"
+        # Abort the in-progress merge
+        run_command "git merge --abort"
+        return 1
+    fi
+
+    # Abort the dry-run merge as it succeeded without conflicts
+    run_command "git merge --abort"
+    return 0
+}
+
+# Function to merge origin/master with the current branch
+merge_with_master() {
+    if can_merge_with_master; then
+        merge_output=$(run_command "git merge origin/master")
+        merge_code=$?
+        if [ $merge_code -eq 0 ]; then
+            echo "Successfully merged origin/master into the current branch."
+        else
+            echo "Failed to merge origin/master: $merge_output"
+        fi
+    else
+        echo "Cannot merge origin/master due to conflicts."
+    fi
+}
+
+# Main execution
+### DEACTIVATED ###
+#Currently this merges master into release branches - therefore it is deactivated.
+#merge_with_master
