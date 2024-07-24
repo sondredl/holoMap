@@ -54,14 +54,18 @@ int main()
   start.Lon = 8.5733;
 
   latLonPos end{};
-  end.Lat = 60.5902;
+  end.Lat = 60.5903;
   end.Lon = 8.5732;
 
-  auto diffLonDeg    = CalcDiffLon(start.Lon, end.Lon);
-  auto diffLonMeters = DegreesToMeters(diffLonDeg);
+  auto diffLonDeg = CalcDiffLon(start.Lon, end.Lon);
+  auto deltaLat   = start.Lat - end.Lat;
 
-  std::cout << "delta Lon degrees = " << diffLonDeg << std::endl;
-  std::cout << "delta Lon meters = " << diffLonMeters << std::endl;
+  auto diffLatMeters = DegreesToMeters(deltaLat);
+  std::cout << "deltaLatMeters: " << diffLatMeters << std::endl;
+  // auto diffLonMeters = DegreesToMeters(diffLonDeg);
+
+  // std::cout << "delta Lon degrees = " << diffLonDeg << std::endl;
+  // std::cout << "delta Lon meters = " << diffLonMeters << std::endl;
 
   // std::cout << "cos(60.5902): " << std::cos(DegreesToRadians(60.5902)) << std::endl;
   auto distanceAtLatitude = MetricDistanceGivenLat(DegreesToRadians(start.Lat), diffLonDeg);
