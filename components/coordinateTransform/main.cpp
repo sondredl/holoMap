@@ -2,5 +2,4 @@
 #include <filesystem>
 
 int main()
-{
-}
+{ }
