@@ -19,5 +19,12 @@ double calcDiffLon(double fromLon, double toLon)
 
 int main()
 {
+  latLonPos start{};
+  start.lat = 0.0000;
+  start.lon = 0.0100;
+
+  latLonPos end{};
+  end.lat = 0.0100;
+  end.lon = 0.0000;
   std::cout << "hello holoWorld" << std::endl;
 }
